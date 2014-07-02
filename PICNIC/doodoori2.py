@@ -13,10 +13,11 @@ def check(n, matched, matches, student_num):
     for target in matches[n]:
         if matched[target] != -1:
             continue
-        _matched = [x for x in matched]
-        _matched[n] = target
-        _matched[target] = n
-        current_sum += check(n+1, _matched, matches, student_num)
+        matched[n] = target
+        matched[target] = n
+        current_sum += check(n+1, matched, matches, student_num)
+        matched[n] = -1
+        matched[target] = -1
     return current_sum
 
 for i in range(n):
