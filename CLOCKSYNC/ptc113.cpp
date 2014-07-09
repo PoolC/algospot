@@ -109,7 +109,7 @@ void findM2(int ii)
     
     for( int i=0 ; i<4 ; i++)
     {
-
+        
         for(int j=0 ; j<i ; j++)
             ChangeNum(ii);
         //cc[ii] = i;
@@ -146,16 +146,18 @@ int main(int argc, const char * argv[])
         for(int j=0 ; j<10 ; j++)
             cc[j] = 0;
         cn=0;
-        //mn = 3*10 + 1;
+        mn = 3*10 + 1;
         found = false;
         
-        for(int j=1 ; j<30 ; j++)
-        {
-            mn = j;
-            findM2(0);
-            if(found)
-                break;
-        }
+        findM2(0);
+        
+        //        for(int j=1 ; j<30 ; j++)
+        //        {
+        //            mn = j;
+        //            findM2(0);
+        //            if(found)
+        //                break;
+        //        }
         
         if(found == false)
         {
@@ -166,7 +168,7 @@ int main(int argc, const char * argv[])
             }
             found = isEnd();
         }
-
+        
         if(found)
             std::cout<<mn<<std::endl;
         else
