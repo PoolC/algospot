@@ -9,17 +9,6 @@ using namespace std;
 //ifstream in("input.txt");
 
 istream& in = cin;
-#include<iostream>
-#include<string>
-#include<stack>
-#include<array>
-
-using namespace std;
-
-//#include<fstream>
-//ifstream in("input.txt");
-
-istream& in = cin;
 
 /*
 https://algospot.com/judge/submission/detail/213464
