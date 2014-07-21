@@ -16,17 +16,16 @@ def main():
     for i in range(n):
         input_cnt = int(rl())
         input_list = rl().split()
-        last = 0
-        cont = 0
-        max_cont = 1
+        cont = {}
         for a in input_list:
-            if a > last:
-                cont += 1
-                max_cont = max(max_cont, cont)
-            else:
-                cont = 1
-            last = a
-        print max_cont
+            a = int(a)
+            if not a in cont:
+                cont[a] = 1
+            for ta in xrange(a-1, 0, -1):
+                if ta in cont:
+                    cont[a] = max(cont[a], cont[ta] + 1)
+                    break
+        max_cont = max([cont[x] for x in cont])
 
 
 if __name__ == "__main__":
