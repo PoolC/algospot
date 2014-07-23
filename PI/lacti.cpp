@@ -6,7 +6,8 @@
 
 #ifdef _DEBUG
 #include <sstream>
-std::stringstream debug_stream("5  12341234 11111222 12122222 22222222 12673939");
+//std::stringstream debug_stream("5  12341234 11111222 12122222 22222222 12673939");
+std::stringstream debug_stream("1  111113131357");
 #define input debug_stream
 #else
 #define input std::cin
@@ -63,8 +64,20 @@ static bool are_all_elements_same(_FwdIt begin, _FwdIt end, _Ty& value) {
     value = *begin;
     for (_FwdIt it = begin; it != end; ++it) {
         _Ty current = *it;
-        if (value != current && value != (-1 * current))
+        if (value != current)
             return false;
+    }
+    return true;
+}
+
+template <typename _FwdIt>
+static bool is_duet(_FwdIt begin, _FwdIt end) {
+    typename _FwdIt::value_type value = -1 * (*begin);
+    for (_FwdIt it = ++begin; it != end; ++it) {
+        typename _FwdIt::value_type current = *it;
+        if (value != current)
+            return false;
+        value *= -1;
     }
     return true;
 }
@@ -76,11 +89,12 @@ static int calc_difficulty(const seq_t& seq, int pos, int length) {
 
     // check and return difficulty value using differernces in sequence
     int element;
-    if (!are_all_elements_same(interval.begin(), interval.end(), element))
+    if (!are_all_elements_same(interval.begin(), interval.end(), element)) {
+        if (is_duet(interval.begin(), interval.end()))
+            return duet;
         return no_rule;
+    }
 
-    if (interval[0] != interval[1])
-        return duet;
     switch (element) {
     case 0:          return repeat;
     case 1: case -1: return mono;
