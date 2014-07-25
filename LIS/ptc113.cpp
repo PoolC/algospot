@@ -15,17 +15,38 @@
 
 int n;
 int in[500];
+int nEachMax[500];
 
 int cu; //count
 int mc; //max count
+
+// 2차 시도에서 시간 복잡도가 order n! 으로 하니 시간 초과 ㅋㅋㅋㅋ
+//void find(int nHead, int index)
+//{
+//    if(cu > mc)
+//        mc = cu;
+//
+////    if( n - index - 1 < mc - cu)
+////        return;
+//
+//    for(int i=index ; i<n ; i++)
+//    {
+//        if(n - i - 1 < mc - cu)
+//            break;
+//        if(in[i] > nHead)
+//        {
+//            cu++;
+//            find(in[i],i+1);
+//            cu--;
+//        }
+//    }
+//}
 
 
 int main(int argc, const char * argv[])
 {
     int c = 0;
     
-    int nt=0; //num temp
-    int de=987654321; //degree
     
     
 #if TEST_MODE
@@ -56,33 +77,37 @@ int main(int argc, const char * argv[])
 #else
             std::cin>>in[i];
 #endif
+            nEachMax[i] = 1;
         }
         
+        
         mc = 0;
-        for(int i=0 ; i<n ; i++)
+        for(int i=n-1 ; i>=0 ; i--)
         {
-            nt = in[i];
             cu = 1;
+            
             for(int j=i+1 ; j<n ; j++)
             {
-                if( in[j] > nt)
+                if(in[i]<in[j])
                 {
-                    nt = in[j];
-                    cu++;
+                    if(nEachMax[i] + nEachMax[j] > cu)
+                    {
+                        cu = nEachMax[i] + nEachMax[j];
+                    }
                 }
             }
-            if(mc < cu)
+            nEachMax[i] = cu;
+            
+            if(cu > mc)
                 mc = cu;
-            if( i + mc > n - i)
-                break;
         }
         
         
         std::cout<<mc<<std::endl;
         
 #if TEST_MODE
-      if(rr != mc)
-          std::cout<<"false"<<std::endl;
+        if(rr != mc)
+            std::cout<<"false"<<std::endl;
 #endif
     }
 #if TEST_MODE
