@@ -11,21 +11,34 @@ if IS_DEBUG:
 else:
     rl = lambda: sys.stdin.readline()
 
+
 def main():
     n = int(rl())
     for i in range(n):
         input_cnt = int(rl())
-        input_list = rl().split()
+        input_list = map(int, rl().split())
         cont = {}
-        for a in input_list:
-            a = int(a)
-            if not a in cont:
-                cont[a] = 1
-            for ta in xrange(a-1, 0, -1):
-                if ta in cont:
-                    cont[a] = max(cont[a], cont[ta] + 1)
+        for now in input_list:
+            cont_len = len(cont)
+            if cont_len == 0:
+                cont[1] = now
+                continue
+            else:
+                cont[1] = min(cont[1], now)
+            for current_len in xrange(cont_len, 0, -1):
+                check = cont[current_len]
+                if check > now:
+                    continue
+                if check == now:
                     break
-        max_cont = max([cont[x] for x in cont])
+                next_len = current_len + 1
+                if next_len in cont:
+                    cont[next_len] = min(now, cont[next_len])
+                else:
+                    cont[next_len] = now
+                #print now, cont
+                break
+        print len(cont)
 
 
 if __name__ == "__main__":
