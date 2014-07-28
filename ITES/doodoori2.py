@@ -12,72 +12,55 @@ if IS_DEBUG:
 else:
     rl = lambda: sys.stdin.readline()
 
-class qq():
-    def __init__(self):
-        self.arr = {}
-        self.s = 0
-        self.e = 0
-    def put(self, e):
-        self.arr[self.e] = e
-        self.e += 1
-    def get(self):
-        ret = self.arr[self.s]
-        del self.arr[self.s]
-        self.s += 1
-        return ret
+ites_init = 1983
 
-class DataGenerator():
-    def __init__(self):
-        self.i = 1983
-    def _Next(self):
-        self.i += 1
-        arr = [1,4,2,1,4,3,1,6]
-        return arr[self.i - 1984]
-    def Next(self):
-        ret = self.i % 10000 + 1
-        self.i = (self.i * 214013 + 2531011) % (4294967296) # ( 2  ** 32)
-        return ret
+def generate_ites(prev):
+    return (prev * 214013 + 2531011) % 4294967296
 
-class Problem():
-    def __init__(self, k, data_len):
-        self.k = k
-        self.data_len = data_len
-        self.is_solved = False
-        self.answer = 0
+def to_seq_number(ites_value):
+    return ites_value % 10000 + 1
 
-def solve_once(problems, max_data_len):
-    d = DataGenerator()
-    for p in problems:
-        p.q = qq() # Queue.Queue()
-        p.s = 0
-        p.cnt = 0
-    for l in xrange(max_data_len):
-        current = d.Next()
-        for p in problems:
-            if p.is_solved:
+class problem_context():
+    def __init__(self, target_sum, seq_count):
+        global ites_init
+        self.seq_count = seq_count
+        self.case_count = 0
+        self.target_sum = target_sum
+        self.sum = 0
+        self.partial_seq_first_ites = ites_init
+
+
+def solve_once(problem_contexts, max_seq_count):
+    global ites_init
+    ites_value = ites_init
+    
+    for seq_index in xrange(max_seq_count):
+        seq_number = to_seq_number(ites_value)
+        for ctx in problem_contexts:
+            if ctx.seq_count < seq_index:
                 continue
-            if p.data_len == l:
-                p.is_solved = True
-                p.answer = p.cnt
-                continue
-            p.q.put(current)
-            p.s += current
-            while p.s >= p.k:
-                if p.s == p.k:
-                    p.cnt += 1
-                p.s -= p.q.get()
-    for p in problems:
-        print p.cnt
+            ctx.sum += seq_number
+            if (ctx.sum == ctx.target_sum):
+                ctx.case_count += 1
+            while (ctx.sum > ctx.target_sum):
+                ctx.sum -= to_seq_number(ctx.partial_seq_first_ites)
+                ctx.partial_seq_first_ites = generate_ites(ctx.partial_seq_first_ites)
+                if (ctx.sum == ctx.target_sum):
+                    ctx.case_count += 1
+        ites_value = generate_ites(ites_value)
+
+    for ctx in problem_contexts:
+        print ctx.case_count
 
 def main():
     n = int(rl())
-    problems = []
-    max_data_len = 0
+    problem_contexts = []
+    max_seq_count = 0
     for i in range(n):
-        (k, data_len) = map(int, rl().split())
-        problems.append(Problem(k, data_len))
-        max_data_len = max(max_data_len, data_len)
-    solve_once(problems, max_data_len)
+        (target_sum, seq_count) = map(int, rl().split())
+        problem_contexts.append(problem_context(target_sum, seq_count))
+        max_seq_count = max(max_seq_count, seq_count)
+    solve_once(problem_contexts, max_seq_count)
 
 if __name__ == "__main__":
     main()
