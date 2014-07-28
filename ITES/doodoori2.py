@@ -38,28 +38,46 @@ class DataGenerator():
         self.i = (self.i * 214013 + 2531011) % (4294967296) # ( 2  ** 32)
         return ret
 
-def solve(k, data_len):
-    d = DataGenerator()
-    q = qq() # Queue.Queue()
-    s = 0
-    cnt = 0 
-    for _ in xrange(data_len):
-        current = d.Next()
-        q.put(current)
-        s += current
-        while s >= k:
-            if s == k:
-                cnt += 1
-            s -= q.get()
-            #print _, s, q.qsize(), current
-    return cnt
+class Problem():
+    def __init__(self, k, data_len):
+        self.k = k
+        self.data_len = data_len
+        self.is_solved = False
+        self.answer = 0
 
+def solve_once(problems, max_data_len):
+    d = DataGenerator()
+    for p in problems:
+        p.q = qq() # Queue.Queue()
+        p.s = 0
+        p.cnt = 0
+    for l in xrange(max_data_len):
+        current = d.Next()
+        for p in problems:
+            if p.is_solved:
+                continue
+            if p.data_len == l:
+                p.is_solved = True
+                p.answer = p.cnt
+                continue
+            p.q.put(current)
+            p.s += current
+            while p.s >= p.k:
+                if p.s == p.k:
+                    p.cnt += 1
+                p.s -= p.q.get()
+    for p in problems:
+        print p.cnt
 
 def main():
     n = int(rl())
+    problems = []
+    max_data_len = 0
     for i in range(n):
         (k, data_len) = map(int, rl().split())
-        print solve(k, data_len)
+        problems.append(Problem(k, data_len))
+        max_data_len = max(max_data_len, data_len)
+    solve_once(problems, max_data_len)
 
 if __name__ == "__main__":
     main()
