@@ -22,6 +22,7 @@ typedef unsigned int num;
 
 const int MaxCase = 30000000;
 num Signals;
+size_t sigbegin = 1;
 
 short ConvertedSignals[MaxCase];
 
@@ -51,7 +52,9 @@ int main() {
 	pint tmp;
 	in >> tCase;
 	while (tCase--) {
-		Init();
+		if (sigbegin != 0) {
+			Init();
+		}
 		in >> tmp.first >> tmp.second;
 		out << ITES(tmp) << endl;
 	}
@@ -59,7 +62,8 @@ int main() {
 }
 
 num ITES(const pint& obj) {
-	size_t begin = 0, end = 0, sigbegin = 0, con = MaxCase - sigbegin;
+	sigbegin = 0;
+	size_t begin = 0, end = 0, con = MaxCase - sigbegin;
 	num sum = ConvertedSignals[begin];
 	num sol = 0;
 	while (end < obj.second) {
