@@ -45,7 +45,7 @@ public:
 
 	Fortress() : value() {}
 	Fortress(int ax, int ay, int ar) : value(ax, ay, ar){}
-	Fortress(const Circle& obj) : Fortress(obj, 0) {}
+	Fortress(const Circle& obj) : Fortress(obj) {}
 	~Fortress() {}
 
 	void NewFortress(const Circle newfort);
