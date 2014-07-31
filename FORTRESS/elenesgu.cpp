@@ -42,11 +42,9 @@ class Fortress {
 public:
 	Circle value;
 	vector<Fortress> SubFortress;
-	int level;
 
 	Fortress() : value() {}
-	Fortress(int ax, int ay, int ar) : value(ax, ay, ar), level(0) {}
-	Fortress(const Circle& obj, int al) : value(obj.Center.x, obj.Center.y, obj.Radius), level(al + 1) {}
+	Fortress(int ax, int ay, int ar) : value(ax, ay, ar){}
 	Fortress(const Circle& obj) : Fortress(obj, 0) {}
 	~Fortress() {}
 
@@ -106,7 +104,7 @@ bool Circle::isInclude(const Circle& fircircle, const Circle& seccircle) {
 
 void Fortress::NewFortress(const Circle newfort) {
 	if (SubFortress.empty()) {
-		SubFortress.push_back(Fortress(newfort, level));
+		SubFortress.push_back(Fortress(newfort));
 		return;
 	}
 	size_t index;
@@ -116,7 +114,7 @@ void Fortress::NewFortress(const Circle newfort) {
 			return;
 		}
 	}	
-	SubFortress.push_back(Fortress(newfort, level));
+	SubFortress.push_back(Fortress(newfort));
 }
 
 int Fortress::FindResult() {
